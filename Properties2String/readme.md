@@ -13,3 +13,5 @@ Edit -- String To Unicode
 Edit -- Unicode To String     ctrl+shift+-
 
 Edit -- String To Unicode     ctrl+shift+=
+
+![demo](http://xiaoxuenotes.com/images/sublimePluginDemo.gif)
