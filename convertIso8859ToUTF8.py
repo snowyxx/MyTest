@@ -10,50 +10,6 @@ from HTMLParser import HTMLParser
 reload(sys)
 sys.setdefaultencoding("utf-8")
 
-
-def main(dir):
-    h = MyHTMLParser()
-
-    getcharset_pattern = r'(?i)content=.*?charset=(.*?)["\']'
-    for currentpath, folders, files in os.walk(dir):
-        for f in files:
-            if f.endswith('.html'):
-                filename = os.path.join(currentpath, f)
-
-                fr = open(filename, 'r')
-                fc = fr.read()
-                htmlCharset = re.findall(getcharset_pattern, fc)[0]
-                if htmlCharset == 'gb2312':
-                    fc = re.sub(
-                        getcharset_pattern, 'content="text/html; charset=utf-8"', fc)
-                    shutil.move(filename, filename+"~")
-                    with io.open(filename, 'w', encoding='utf-8') as fw:
-                        fw.write(fc.decode('gbk'))
-                elif htmlCharset == 'utf-8':
-                    pass
-                elif htmlCharset == 'iso-8859-1':
-                    fc = io.open(filename, 'r', encoding='iso-8859-1').read()
-                    fc = re.sub(
-                        getcharset_pattern, 'content="text/html; charset=utf-8"', fc)
-                    shutil.move(filename, filename+"~")
-                    with io.open(filename, 'w', encoding='utf-8') as fw:
-                        fw.write(h.unescape(fc))
-
-if __name__ == '__main__':
-    basedir = '.'
-    if len(sys.argv) > 1:
-        basedir = os.path.realpath(sys.argv[1])
-    main(basedir)
-
-
-##########
-#   Since I only want to convert Chinese but other specile character.
-#   So I use MyHTMLParser class with overwrithe monthed unescape.
-#   https://hg.python.org/cpython/file/2.7/Lib/HTMLParser.py
-#   https://hg.python.org/cpython/file/2.7/Lib/htmlentitydefs.py
-##########
-
-
 class MyHTMLParser(HTMLParser):
     entitydefs = None
 
@@ -88,4 +44,52 @@ class MyHTMLParser(HTMLParser):
 
         # return re.sub(r"&(#?[xX]?(?:[0-9a-fA-F]+|\w{1,8}));", replaceEntities, s)
         return re.sub(r"&(#?[xX]?[0-9a-fA-F]+);", replaceEntities, s)
+
+def main(dir):
+    h = MyHTMLParser()
+
+    getcharset_pattern = r'(?i)content=.*?charset=(.*?)["\']'
+    for currentpath, folders, files in os.walk(dir):
+        for f in files:
+            if f.endswith('.html'):
+                filename = os.path.join(currentpath, f)
+
+                fr = open(filename, 'r')
+                fc = fr.read()
+                finds = re.findall(getcharset_pattern, fc)
+                if len(finds)>0:
+                    htmlCharset = finds[0]
+                else:
+                    htmlCharset =''
+                if htmlCharset == 'gb2312':
+                    fc = re.sub(
+                        getcharset_pattern, 'content="text/html; charset=utf-8"', fc)
+                    shutil.move(filename, filename+"~")
+                    with io.open(filename, 'w', encoding='utf-8') as fw:
+                        fw.write(fc.decode('gbk'))
+                elif htmlCharset == 'utf-8':
+                    pass
+                elif htmlCharset == 'iso-8859-1':
+                    fc = io.open(filename, 'r', encoding='iso-8859-1').read()
+                    fc = re.sub(
+                        getcharset_pattern, 'content="text/html; charset=utf-8"', fc)
+                    shutil.move(filename, filename+"~")
+                    with io.open(filename, 'w', encoding='utf-8') as fw:
+                        fw.write(h.unescape(fc))
+
+if __name__ == '__main__':
+    basedir = '.'
+    if len(sys.argv) > 1:
+        basedir = os.path.realpath(sys.argv[1])
+    main(basedir)
+
+
+##########
+#   Since I only want to convert Chinese but other specile character.
+#   So I use MyHTMLParser class with overwrithe monthed unescape.
+#   https://hg.python.org/cpython/file/2.7/Lib/HTMLParser.py
+#   https://hg.python.org/cpython/file/2.7/Lib/htmlentitydefs.py
+##########
+
+
         

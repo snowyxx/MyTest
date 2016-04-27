@@ -1,0 +1,18 @@
+[
+{
+    "id": "edit",
+    "children":
+    [
+        {
+            "id" : "unicodetostring",
+            "caption" : "Unicode To String",
+            "command" : "unicode_to_string"
+        },
+        {
+            "id" : "stringtounicode",
+            "caption" : "String To Unicode",
+            "command" : "string_to_unicode"
+        }
+    ]
+}
+]
