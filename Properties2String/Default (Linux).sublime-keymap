@@ -1,4 +1,0 @@
-[
-    { "keys": ["ctrl+shift+-"], "command": "unicode_to_string" },
-    { "keys": ["ctrl+shift+="], "command": "string_to_unicode" }
-]
