@@ -5,11 +5,31 @@ import re
 import sys
 import pdb
 import time
+import datetime
 import subprocess
+import logging
+import logging.handlers
 from conf import data, MYPRODUCT, MYLANGUAGE, MYEDITOR
 
 #TODO: cvs setup and login
 #TODO: send notification by mail
+
+
+#loging settings
+format = '%(asctime)s %(levelname)s %(message)s'
+logFileName = r'output.log'
+formatter = logging.Formatter(format)
+infoLogger = logging.getLogger("infoLog")
+infoLogger.setLevel(logging.INFO)
+infoHandler = logging.handlers.RotatingFileHandler(
+    logFileName, 'a', 1024*1024, 1)
+infoHandler.setLevel(logging.INFO)
+infoHandler.setFormatter(formatter)
+terminalHandler = logging.StreamHandler()
+terminalHandler.setFormatter(formatter)
+terminalHandler.setLevel(logging.INFO)
+infoLogger.addHandler(infoHandler)
+infoLogger.addHandler(terminalHandler)
 
 
 def runcmd(cmd):
@@ -19,38 +39,61 @@ def runcmd(cmd):
     return(statusCode, outdata, errdata)
 
 
+def string2timestamp(timestr, timefmt='%Y-%m-%d %H:%M:%S'):
+    dt_obj = datetime.datetime.strptime(timestr, timefmt)
+    return time.mktime(dt_obj.timetuple())
+
+
+def getLastEnVer(cnlog, enlog):
+    '''
+    To get the English version which since lastest No-English version's time.
+    It means from which English version we should update our No-English
+    '''
+    lastPartten = r'(?is)revision (.*?)\r?\s*date: (.*?) \+'
+    cnVers = re.findall(lastPartten, cnlog)
+    enVers = re.findall(lastPartten, enlog)
+    lastcnVer, lastcntime = cnVers[0]
+    lastcnTS = string2timestamp(lastcntime)
+    enVers_ST = [(x, string2timestamp(y)) for (x, y) in enVers]
+    lastenVer = 'None'
+    for x, y in enVers_ST:
+        if y > lastcnTS:
+            lastenVer = x
+        if lastenVer and y < lastcnTS:
+            lastenVer = x
+            break
+    return lastenVer
+
+
 def doCVS(product):
     languageList = ['en', MYLANGUAGE]
-    if os.path.exists('diff.txt'):
-        os.remove('diff.txt')
     if os.path.exists('log.txt'):
         os.remove('log.txt')
-
+    if os.path.exists('diff.txt'):
+        os.remove('diff.txt')
     products = []
     if product.lower() == 'my':
         products = MYPRODUCT
-    elif product.lower() in ['all', 'me', 'zoho']:
+    elif product.lower() == 'all':
         products = data.keys()
     else:
         products.append(product)
     for toCheckProduct in products:
         toCheckProduct = toCheckProduct.upper()
-        print '{}\n[-] TO PROCESS product: {}'.format('='*20, toCheckProduct)
+        infoLogger.info('{}\n[-] TO PROCESS product: {}'.format('='*20, toCheckProduct))
         flag = False
         files2Open = []
+        files2Diff = {}
         if toCheckProduct not in data:
-            print '[!] The product does not support: {}'.format(toCheckProduct)
+            infoLogger.info('[!] We do not support this product name: {}'.format(toCheckProduct))
+            possibleNames = [n for n in data.keys() if toCheckProduct in n]
+            infoLogger.info('[!] You you mean: {}'.format(' or '.join(possibleNames)))
             usage()
             continue
-        files = data[toCheckProduct]
-        for f in files:
-            if f['brand'] != product.lower() and product.lower() in ['all', 'me', 'zoho']:
-                continue
+        for f in data[toCheckProduct]:
             if f['language'] in languageList:
                 statusCommand = 'cvs status {}'.format(f['path'])
-                print '[-] TO RUN: {}'.format(statusCommand)
-                # if 'Apiclient_zh_CN' in f['path']:
-                #     pdb.set_trace()
+                infoLogger.info('[-] TO RUN: {}'.format(statusCommand))
                 statusCode, outdata, errdata = runcmd(statusCommand)
                 if not os.path.exists(f['path']):
                     flag = True
@@ -59,85 +102,122 @@ def doCVS(product):
                 try:
                     status = re.search(statusRex, outdata).group(1)
                 except Exception:
-                    # print '[!] Could not pickup status information, check above command output please...'
+                    infoLogger.info('[!] error of running command {}:\n{}\n{}'.format(statusCode, errdata, outdata))
                     continue
-                print '-------- Status is : {}'.format(status)
+                infoLogger.info('-------- Status is : {}'.format(status))
                 if 'Needs Patch' == status:
                     flag = True
+                    properEnLastVer = 0
                     workingVerRex = r'Working revision:\s*(\S*)?\s'
-                    workingVer = re.search(workingVerRex, outdata).group(1)
                     storeVerRex = r'Repository revision:\s*(\S*)?\s'
+                    workingVer = re.search(workingVerRex, outdata).group(1)
                     storeVer = re.search(storeVerRex, outdata).group(1)
-                    print '-------- new version is :{}\tcurrent version is:{}'.format(storeVer, workingVer)
-                    print '-------- Last update information:\n{}'.format(outdata)
-                    diffFile = open('diff.txt', 'a')
-                    diffcmd = 'cvs diff -r{} -r{} {}'.format(storeVer, workingVer, f['path'])  # cvs diff return code is 256 :)
-                    print '[-] TO RUN {}'.format(diffcmd)
-                    statusCode, outdata, errdata = runcmd(diffcmd)
-                    print '[-] TO WRITE diff.txt'
-                    diffFile.write(outdata)
-                    diffFile.close()
+                    f['workingVer'] = workingVer
+                    f['storeVer'] = storeVer
+                    files2Diff[f['path']] = f
+                    infoLogger.info('-------- new version is :{}\tYour version is:{}'.format(storeVer, workingVer))
+                    infoLogger.info('-------- Last update information:\n{}'.format(outdata))
                     if f['language'] != 'en':
-                        files2Open.append(f['path'])
-                        print '[!] !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n[!] No-English file has been modified recently. \n[!] Look into diff.txt and log.txt to find out what is new. \n[!] !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
-                        logcmd = 'cvs log -r{}:{} {}'.format(workingVer, storeVer, f['path'])
-                        print '[-] TO RUN {}'.format(logcmd)
-                        statusCode, outdata, errdata = runcmd(logcmd)
-                        print '[-] TO WRITE log.txt'
+                        infoLogger.info('\n[!] !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n[!] No-English file has been modified recently. \n[!] Look into diff.txt and log.txt to find out what is new. \n[!] !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+                        enfile = {}
+                        enpath = ''
+                        for x in data[toCheckProduct]:
+                            if x['category'] == f['category'] and x['language'] == 'en':
+                                enfile = x
+                                enpath = x['path']
+                                break
+                        thislogcmd = 'cvs log -r{}:{} {}'.format(workingVer, storeVer, f['path'])
+                        enlogcmd = 'cvs log {}'.format(enpath)
+                        infoLogger.info('[-] TO RUN {}'.format(thislogcmd))
+                        statusCode, thislog, errdata = runcmd(thislogcmd)
+                        infoLogger.info('[-] TO RUN {}'.format(enlogcmd))
+                        statusCode, enlog, errdata = runcmd(enlogcmd)
+                        properEnLastVer = getLastEnVer(thislog, enlog)
+                        if properEnLastVer != 'None':
+                            files2Open.append(f['path'])
+                            infoLogger.info('-------- [!] You should update your file base on en version: {}'.format(properEnLastVer))
+                        enfile['properEnLastVer'] = properEnLastVer
+                        files2Diff[enpath] = enfile
+                        infoLogger.info('[-] TO WRITE log.txt')
                         logFile = open('log.txt', 'a')
-                        logFile.write(outdata)
+                        logFile.write(thislog)
+                        logFile.write('\n'*2)
+                        logFile.write(enlog)
+                        logFile.write('\n'*4)
                         logFile.close()
                     else:
                         category = f['category']
                         files2Open += [x['path'] for x in data[toCheckProduct] if x['category'] == category and x['language'] == MYLANGUAGE]
-                else:
-                    continue
         if flag:
+            cvsDiff(files2Diff)
             files2Open = list(set(files2Open))
             checkOut(toCheckProduct, files2Open)
 
 
+def cvsDiff(files):
+    for f in files.values():
+        properEnLastVer = f.get('properEnLastVer', 0)
+        storeVer = f.get('storeVer', 0)
+        workingVer = f.get('workingVer', 0)
+        if properEnLastVer == 'None':
+            infoLogger.info('[*] en file did not update since your language file last ci by other one.')
+            continue
+        elif properEnLastVer:
+            if not workingVer:
+                infoLogger.info('[*] en file did not update since your last co.')
+                continue
+            elif storeVer == properEnLastVer:
+                continue
+            else:
+                workingVer = properEnLastVer
+        diffFile = open('diff.txt', 'a')
+        diffcmd = 'cvs diff -r{} -r{} {}'.format(storeVer, workingVer, f['path'])  # cvs diff return code is 256 :)
+        infoLogger.info('[-] TO RUN {}'.format(diffcmd))
+        statusCode, outdata, errdata = runcmd(diffcmd)
+        infoLogger.info('[-] TO WRITE diff.txt')
+        diffFile.write(outdata)
+        diffFile.write('\n'*4)
+        diffFile.close()
+
+
 def checkOut(toCheckProduct, files2Open):
-    # pdb.set_trace()
     rootpath = data[toCheckProduct][0]['path'].split('/')[0]
     coCmd = 'cvs co {}'.format(rootpath)
-    print '[-] TO CHECK OUT: {}'.format(coCmd)
+    infoLogger.info('[-] TO CHECK OUT: {}'.format(coCmd))
     statusCode, outdata, errdata = runcmd(coCmd)
-    print outdata
+    infoLogger.info(outdata)
 
-    if len(files2Open)>0:
+    if len(files2Open) > 0:
         openFilesCmd = '{} {}'.format(MYEDITOR, ' '.join(files2Open))
-        print '[-] TO OPEN the files: {}'.format(openFilesCmd)
+        infoLogger.info('[-] TO OPEN the files: {}'.format(openFilesCmd))
         runcmd(openFilesCmd)
 
 
 def openFile(filepath):
     startEditorCmd = '{} {}'.format(MYEDITOR, filepath)
-    print '[-] TO OPEN file: {}'.format(startEditorCmd)
+    infoLogger.info('[-] TO OPEN file: {}'.format(startEditorCmd))
     try:
         statusCode, outdata, errdata = runcmd(startEditorCmd)
         if statusCode > 0:
-            print '[!] Could not open file {}.'.format(filepath)
-            print statusCode, outdata, errdata
+            infoLogger.info('[!] Could not open file {}.'.format(filepath))
+            infoLogger.info(statusCode, outdata, errdata)
     except Exception as e:
-        print '[!] Could not open your eidtor to open file {}.'.format(filepath)
-        print e
+        infoLogger.info('[!] Could not open your eidtor to open file {}.'.format(filepath))
+        infoLogger.info(e)
 
 
 def usage():
-    print '-'*50
-    print 'Usage:'
-    print 'python mycvs.py <product name>'
+    infoLogger.info('-'*50)
+    infoLogger.info('Usage:')
+    infoLogger.info('python mycvs.py <product name>')
     sortedProductNames = data.keys()
     sortedProductNames.sort()
-    print '\nSupported product names:\n {}'.format('  '.join(sortedProductNames).lower())
-    print '\nNOTE: Supported special names:\n'
-    print '\t- my : the product names defined in MYPRODUCT of conf.py'
-    print '\t- me : all ManageEngine products'
-    print '\t- zoho : all zoho.com products'
-    print '\t- all : all products. (DO NOT DO THIS... It will take long long time)'
-    print '\nNOTE: Product name IS NOT case  sensitive'
-    print '-'*50
+    infoLogger.info('\nSupported product names:\n {}'.format('  '.join(sortedProductNames).lower()))
+    infoLogger.info('\nNOTE: Supported special names:\n')
+    infoLogger.info('\t- my : the product names defined in MYPRODUCT of conf.py')
+    infoLogger.info('\t- all : all products. (DO NOT DO THIS... It will take long long time)')
+    infoLogger.info('\nNOTE: Product name IS NOT case  sensitive')
+    infoLogger.info('-'*50)
 
 
 if __name__ == '__main__':
@@ -147,12 +227,12 @@ if __name__ == '__main__':
         strttime = time.time()
         product = sys.argv[1]
         doCVS(product)
-        try:
-            diffFileLastModifyTime = os.path.getmtime('diff.txt')
-            logFileLastModifyTime = os.path.getmtime('log.txt')
-            if diffFileLastModifyTime > strttime:
-                openFile('diff.txt')
-            if logFileLastModifyTime > strttime:
-                openFile('log.txt')
-        except OSError, e:
-            pass
+        infoLogger.info('[*] If you can not view all printing of this script, please open output.log to get all lines.')
+        for f in ['diff.txt', 'log.txt']:
+            try:
+                if os.path.exists(f):
+                    lastModifyTime = os.path.getmtime(f)
+                    if lastModifyTime >= strttime:
+                        openFile(f)
+            except Exception, e:
+                infoLogger.info('[!] Exception happended when to to open file: {}\n{}'.format(f, e))
