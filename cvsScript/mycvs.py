@@ -9,7 +9,7 @@ import datetime
 import subprocess
 import logging
 import logging.handlers
-from conf import data, MYPRODUCT, MYLANGUAGE, MYEDITOR
+from conf import data, MYPRODUCT, MYLANGUAGE, MYEDITOR, MYNAME
 
 #TODO: cvs setup and login
 #TODO: send notification by mail
@@ -31,6 +31,10 @@ terminalHandler.setLevel(logging.INFO)
 infoLogger.addHandler(infoHandler)
 infoLogger.addHandler(terminalHandler)
 
+FRESHFILECOUNT = 0
+NEEDSPATHCOUNT = 0
+TOCIFILES = []
+
 
 def runcmd(cmd):
     p = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
@@ -46,8 +50,8 @@ def string2timestamp(timestr, timefmt='%Y-%m-%d %H:%M:%S'):
 
 def getLastEnVer(cnlog, enlog):
     '''
-    To get the English version which since lastest No-English version's time.
-    It means from which English version we should update our No-English
+    To get the English version which since lastest your No-English version's update.
+    It means from which English version we should update you No-English
     '''
     lastPartten = r'(?is)revision (.*?)\r?\s*date: (.*?) \+'
     cnVers = re.findall(lastPartten, cnlog)
@@ -66,6 +70,7 @@ def getLastEnVer(cnlog, enlog):
 
 
 def doCVS(product):
+    global FRESHFILECOUNT, NEEDSPATHCOUNT, TOCIFILES
     languageList = ['en', MYLANGUAGE]
     if os.path.exists('log.txt'):
         os.remove('log.txt')
@@ -87,7 +92,7 @@ def doCVS(product):
         if toCheckProduct not in data:
             infoLogger.info('[!] We do not support this product name: {}'.format(toCheckProduct))
             possibleNames = [n for n in data.keys() if toCheckProduct in n]
-            infoLogger.info('[!] You you mean: {}'.format(' or '.join(possibleNames)))
+            infoLogger.info('[!] Do you mean: {}'.format(' or '.join(possibleNames)))
             usage()
             continue
         for f in data[toCheckProduct]:
@@ -97,6 +102,7 @@ def doCVS(product):
                 statusCode, outdata, errdata = runcmd(statusCommand)
                 if not os.path.exists(f['path']):
                     flag = True
+                    FRESHFILECOUNT += 1
                     continue
                 statusRex = r'Status:\s(.*?)\r?\n'
                 try:
@@ -106,6 +112,7 @@ def doCVS(product):
                     continue
                 infoLogger.info('-------- Status is : {}'.format(status))
                 if 'Needs Patch' == status:
+                    NEEDSPATHCOUNT += 1
                     flag = True
                     properEnLastVer = 0
                     workingVerRex = r'Working revision:\s*(\S*)?\s'
@@ -151,6 +158,7 @@ def doCVS(product):
         if flag:
             cvsDiff(files2Diff)
             files2Open = list(set(files2Open))
+            TOCIFILES += files2Open
             checkOut(toCheckProduct, files2Open)
 
 
@@ -227,7 +235,6 @@ if __name__ == '__main__':
         strttime = time.time()
         product = sys.argv[1]
         doCVS(product)
-        infoLogger.info('[*] If you can not view all printing of this script, please open output.log to get all lines.')
         for f in ['diff.txt', 'log.txt']:
             try:
                 if os.path.exists(f):
@@ -236,3 +243,11 @@ if __name__ == '__main__':
                         openFile(f)
             except Exception, e:
                 infoLogger.info('[!] Exception happended when to to open file: {}\n{}'.format(f, e))
+
+        infoLogger.info('[*] If you can not view all printing of this script, please open output.log to get all lines.')
+        infoLogger.info(' >>>>>>>>>>>>>>>>>>>>> Summary <<<<<<<<<<<<<<<<<<<')
+        infoLogger.info('\t - New file count: {}'.format(FRESHFILECOUNT))
+        infoLogger.info('\t - Updated file count: {}'.format(NEEDSPATHCOUNT))
+        if len(TOCIFILES)>0:
+            infoLogger.info('\t - Check in command you would to run: ')
+            infoLogger.info('\t cvs ci -m"by {0}" {1}'.format(MYNAME, ' '.join(TOCIFILES)))

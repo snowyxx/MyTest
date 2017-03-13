@@ -1,6 +1,7 @@
-MYPRODUCT = ['eventlog_analyzer', 'firewall_analyzer', 'me-am', 'me-apm-insight', 'nba', 'ncm', 'netflow', 'nfaee', 'opmunified', 'oputils']
+MYPRODUCT = ['eventlog_analyzer', 'firewall_analyzer', 'me-am', 'me-apm-insight','ncm', 'netflow', 'nfaee', 'opmunified', 'oputils', 'ALARMCENTRAL']
 MYLANGUAGE = 'cn'
 MYEDITOR = 'start'
+MYNAME = 'Your Name'
 data = {'AD360':[
 {'branch':'HEAD', 'brand':'zoho', 'language':'en', 'category':'ApplicationResources', 'path':'ad360/zoho/HEAD/ad360/product_package/resources/ad360/ApplicationResources_en_US.properties'},
 {'branch':'HEAD', 'brand':'zoho', 'language':'en', 'category':'JSApplicationResources', 'path':'ad360/zoho/HEAD/ad360/product_package/resources/ad360/jsMessage/ApplicationResources_script_en_US.properties'},
@@ -209,12 +210,12 @@ data = {'AD360':[
 {'branch':'default', 'brand':'zoho', 'language':'cn', 'category':'JSApplicationResource', 'path':'netflow/zoho/default/netflow/web/WEB-INF/classes/resources/JSApplicationResources_zh_CN.properties'},
 ],
 'NFAEE':[
-{'branch':'HEAD', 'brand':'zoho', 'language':'en', 'category':'-', 'path':'netflow_ee_central netflowee/zoho/HEAD/nfaee/centralserver/web/WEB-INF/classes/resources/ApplicationResources_en.properties'},
-{'branch':'HEAD', 'brand':'zoho', 'language':'en', 'category':'-', 'path':'netflow_ee_collector netflowee/zoho/HEAD/nfaee/collector/web/WEB-INF/classes/resources/ApplicationResources_en.properties'},
-{'branch':'HEAD', 'brand':'zoho', 'language':'jp', 'category':'-', 'path':'- netflow_ee_central netflowee/zoho/HEAD/nfaee/collector/web/WEB-INF/classes/resources/ApplicationResources_ja.properties'},
-{'branch':'HEAD', 'brand':'zoho', 'language':'jp', 'category':'-', 'path':'- netflow_ee_collector netflowee/zoho/HEAD/nfaee/centralserver/web/WEB-INF/classes/resources/ApplicationResources_ja.properties'},
-{'branch':'HEAD', 'brand':'zoho', 'language':'cn', 'category':'-', 'path':'- netflow_ee_central netflowee/zoho/HEAD/nfaee/collector/web/WEB-INF/classes/resources/ApplicationResources_zh_CN.properties'},
-{'branch':'HEAD', 'brand':'zoho', 'language':'cn', 'category':'-', 'path':'- netflow_ee_collector netflowee/zoho/HEAD/nfaee/centralserver/web/WEB-INF/classes/resources/ApplicationResources_zh_CN.properties'},
+{'branch':'HEAD', 'brand':'zoho', 'language':'en', 'category':'-', 'path':'netflowee/zoho/HEAD/nfaee/centralserver/web/WEB-INF/classes/resources/ApplicationResources_en.properties'},
+{'branch':'HEAD', 'brand':'zoho', 'language':'en', 'category':'-', 'path':'netflowee/zoho/HEAD/nfaee/collector/web/WEB-INF/classes/resources/ApplicationResources_en.properties'},
+{'branch':'HEAD', 'brand':'zoho', 'language':'jp', 'category':'-', 'path':'netflowee/zoho/HEAD/nfaee/collector/web/WEB-INF/classes/resources/ApplicationResources_ja.properties'},
+{'branch':'HEAD', 'brand':'zoho', 'language':'jp', 'category':'-', 'path':'netflowee/zoho/HEAD/nfaee/centralserver/web/WEB-INF/classes/resources/ApplicationResources_ja.properties'},
+{'branch':'HEAD', 'brand':'zoho', 'language':'cn', 'category':'-', 'path':'netflowee/zoho/HEAD/nfaee/collector/web/WEB-INF/classes/resources/ApplicationResources_zh_CN.properties'},
+{'branch':'HEAD', 'brand':'zoho', 'language':'cn', 'category':'-', 'path':'netflowee/zoho/HEAD/nfaee/centralserver/web/WEB-INF/classes/resources/ApplicationResources_zh_CN.properties'},
 ],
 'ONEZOHO':[
 {'branch':'master', 'brand':'fuji', 'language':'en', 'category':'Rebrand', 'path':'onezoho/fuji/master/onezoho/customer_resources/fuji/common/WEB-INF/classes/resources/Rebrand_en.properties'},
@@ -339,6 +340,20 @@ data = {'AD360':[
 'SERVICEDESK':[
 {'branch':'default', 'brand':'zoho', 'language':'en', 'category':'IT360Resources', 'path':'servicedeskplus/zoho/default/servicedesk/itms/resources/WEB-INF/classes/resources/it360/IT360Resources_en_US.properties'},
 {'branch':'default', 'brand':'zoho', 'language':'cn', 'category':'IT360Resources', 'path':'servicedeskplus/zoho/default/servicedesk/itms/resources/WEB-INF/classes/resources/it360/IT360Resources_zh_CN.properties'},
+],
+'SERVICE_LAUNCHER':[
+{'branch':'default', 'brand':'zoho', 'language':'en', 'category':'OnPremiseRebrandResources', 'path':'service_launcher/zoho/default/service_launcher/customer_resources/Zoho/accounts/lib/iam/resources/OnPremise/Rebrand_en_op.properties'},
+{'branch':'default', 'brand':'zoho', 'language':'en', 'category':'OnPremiseMessageResources', 'path':'service_launcher/zoho/default/service_launcher/customer_resources/Zoho/accounts/lib/iam/resources/OnPremise/MessageResources_en_op.properties'},
+{'branch':'default', 'brand':'zoho', 'language':'en', 'category':'OnPremiseResource', 'path':'service_launcher/zoho/default/service_launcher/customer_resources/ManageEngine/accounts/lib/iam/resources/OnPremise/MessageResources_op_en.properties'},
+{'branch':'default', 'brand':'zoho', 'language':'en', 'category':'OnPremiseRebrand', 'path':'service_launcher/zoho/default/service_launcher/customer_resources/ManageEngine/accounts/lib/iam/resources/OnPremise/Rebrand_op_en.properties'},
+{'branch':'default', 'brand':'zoho', 'language':'jp', 'category':'OnPremiseRebrandResources', 'path':'service_launcher/zoho/default/service_launcher/customer_resources/Zoho/accounts/lib/iam/resources/OnPremise/Rebrand_op_ja.properties'},
+{'branch':'default', 'brand':'zoho', 'language':'jp', 'category':'OnPremiseMessageResources', 'path':'service_launcher/zoho/default/service_launcher/customer_resources/Zoho/accounts/lib/iam/resources/OnPremise/MessageResources_op_ja.properties'},
+{'branch':'default', 'brand':'zoho', 'language':'jp', 'category':'OnPremiseResource', 'path':'service_launcher/zoho/default/service_launcher/customer_resources/ManageEngine/accounts/lib/iam/resources/OnPremise/MessageResources_op_ja.properties'},
+{'branch':'default', 'brand':'zoho', 'language':'jp', 'category':'OnPremiseRebrand', 'path':'service_launcher/zoho/default/service_launcher/customer_resources/ManageEngine/accounts/lib/iam/resources/OnPremise/Rebrand_op_ja.properties'},
+{'branch':'default', 'brand':'zoho', 'language':'cn', 'category':'OnPremiseRebrandResources', 'path':'service_launcher/zoho/default/service_launcher/customer_resources/Zoho/accounts/lib/iam/resources/OnPremise/Rebrand_op_zh.properties'},
+{'branch':'default', 'brand':'zoho', 'language':'cn', 'category':'OnPremiseMessageResources', 'path':'service_launcher/zoho/default/service_launcher/customer_resources/Zoho/accounts/lib/iam/resources/OnPremise/MessageResources_op_zh.properties'},
+{'branch':'default', 'brand':'zoho', 'language':'cn', 'category':'OnPremiseResource', 'path':'service_launcher/zoho/default/service_launcher/customer_resources/ManageEngine/accounts/lib/iam/resources/OnPremise/MessageResources_op_zh.properties'},
+{'branch':'default', 'brand':'zoho', 'language':'cn', 'category':'OnPremiseRebrand', 'path':'service_launcher/zoho/default/service_launcher/customer_resources/ManageEngine/accounts/lib/iam/resources/OnPremise/Rebrand_op_zh.properties'},
 ],
 'SUPPORTCENTER':[
 {'branch':'default', 'brand':'zoho', 'language':'en', 'category':'ApplicationResource', 'path':'supportcenter/zoho/default/supportcenter/library/resources/WEB-INF/classes/resources/ApplicationResources.properties'},
