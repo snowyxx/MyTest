@@ -39,7 +39,7 @@ public class IpmiSnmpTest {
             logger.setLevel(Level.ALL);
             SimpleFormatter formatter = new SimpleFormatter();
             handler.setFormatter(formatter);           
-            logger.setUseParentHandlers(false);
+            logger.setUseParentHandlers(false); //disable write to stdout
         } catch (SecurityException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -84,7 +84,12 @@ public class IpmiSnmpTest {
         client.target.setTargetPort(161);
         client.target.setCommunity(community);
         client.target.setSnmpVersion(0);
-        client.target.setTimeout(5);
+        String snmpTimeout = null;
+        try {
+            snmpTimeout = client.prop.getProperty("snmp.target.set.timeout");
+        }catch(Exception e){}
+        int snmpTimeoutValue = snmpTimeout!=null?Integer.parseInt(snmpTimeout):5;
+        client.target.setTimeout(snmpTimeoutValue);
         
         client.processIBMHWData();
         System.exit(0);
@@ -245,7 +250,7 @@ public class IpmiSnmpTest {
             }else if(name.startsWith("ATTRI_") && !tables.containsKey(name.substring(6, name.length()))) {
                 attributes.put(name.substring(6, name.length()), oid);
             }else {
-                logger.info("Your key does not with TABLE_ or ATTRI_, so do not consider it as an oid to get: " + name);
+//                logger.info("Your key does not with TABLE_ or ATTRI_, so do not consider it as an oid to get: " + name);
             }
         }
 
