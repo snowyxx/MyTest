@@ -303,7 +303,10 @@ public class IpmiSnmpTest {
             if (!thisOid.startsWith(oid)){
                 break;
             }
-            String columnIndex =  thisOid.substring(thisOid.length()-3,thisOid.length()-2);
+            String thisColumnOid = thisOid.substring(0, thisOid.lastIndexOf("."));
+            String preOid = thisColumnOid.substring(0, thisColumnOid.lastIndexOf("."));
+            String columnIndex = thisColumnOid.substring(thisColumnOid.lastIndexOf(".")+1);
+            
             if (thisColumnIndex == null) {
                 thisColumnIndex = columnIndex;
             }else if(!thisColumnIndex.equals(columnIndex)) {
@@ -313,7 +316,7 @@ public class IpmiSnmpTest {
                 rowIndex++;
                 if(rowIndex == maxNumber-1) {
                     int nextColumnIndexValue = Integer.parseInt(columnIndex)+1;
-                    String nextColumnOid = thisOid.substring(0, thisOid.length()-3)+String.valueOf(nextColumnIndexValue);
+                    String nextColumnOid = preOid+"."+String.valueOf(nextColumnIndexValue);
                     target.setObjectID(nextColumnOid);
                 }
             }
