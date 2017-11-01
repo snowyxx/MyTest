@@ -198,7 +198,7 @@ public class IpmiSnmpTest {
                         String cname=(1<row.size())?(String) row.get(1):"-";
                         String value=(2<row.size())?(String) row.get(2):"-";
                         if("FAN".equals(name)){
-                            value=value.replaceAll(" %", "");
+                            value=value.indexOf("%")>0?value.substring(0, value.indexOf("%")).trim():value;
                         }else if("VOLT".equals(name)){
                             value=String.valueOf(Integer.valueOf(value)/1000.0);
                         }
