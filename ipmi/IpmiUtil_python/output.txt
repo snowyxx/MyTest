@@ -1,0 +1,204 @@
+<--table Event Log starts-->
+index|sNum|Name|Status|Reading
+0|b6|SEL Fullness|OK|-
+<--table Event Log ends-->
+<--table Temperature starts-->
+index|sNum|Name|Status|Reading
+0|32|Ambient Temp|OK|30.00 C
+1|31|IOH Temp Status|OK|-
+2|c0|CPU 1 OverTemp|OK|-
+3|c1|CPU 2 OverTemp|OK|-
+4|e0|DIMM 1 Temp|OK*|-
+5|e1|DIMM 2 Temp|OK|-
+6|e2|DIMM 3 Temp|OK|-
+7|e3|DIMM 4 Temp|OK*|-
+8|e4|DIMM 5 Temp|OK*|-
+9|e5|DIMM 6 Temp|OK|-
+10|e6|DIMM 7 Temp|OK*|-
+11|e7|DIMM 8 Temp|OK*|-
+12|e8|DIMM 9 Temp|OK|-
+13|e9|DIMM 10 Temp|OK*|-
+14|ea|DIMM 11 Temp|OK|-
+15|eb|DIMM 12 Temp|OK|-
+16|ec|DIMM 13 Temp|OK*|-
+17|ed|DIMM 14 Temp|OK*|-
+18|ee|DIMM 15 Temp|OK|-
+19|ef|DIMM 16 Temp|OK*|-
+20|f3|DIMM 17 Temp|OK*|-
+21|f4|DIMM 18 Temp|OK|-
+<--table Temperature ends-->
+<--table OS Critical Sto starts-->
+index|sNum|Name|Status|Reading
+0|c4|PCI 1|Absent|-
+1|c5|PCI 2|Absent|-
+2|c6|PCI 3|Absent|-
+3|c7|PCI 4|Absent|-
+4|c3|All PCI Error|Absent|-
+5|c9|One of PCI Error|Absent|-
+6|c8|PCI 5|Absent|-
+<--table OS Critical Sto ends-->
+<--table System Event starts-->
+index|sNum|Name|Status|Reading
+0|cb|CPU Fault Reboot|OK|-
+1|cc|Aux Log|OK|-
+2|39|OS RealTime Mod|OK|-
+<--table System Event ends-->
+<--table Watchdog_2 starts-->
+index|sNum|Name|Status|Reading
+0|03|IPMI Watchdog|OK|-
+<--table Watchdog_2 ends-->
+<--table System Firmware starts-->
+index|sNum|Name|Status|Reading
+0|92|ABR Status|_|-
+1|b4|Firmware Error|_|-
+2|b5|Progress|_|-
+<--table System Firmware ends-->
+<--table Memory starts-->
+index|sNum|Name|Status|Reading
+0|34|All DIMMS|OK|-
+1|35|One of the DIMMs|OK|-
+2|d0|DIMM 1|OK|-
+3|d1|DIMM 2|OK|-
+4|d2|DIMM 3|OK|-
+5|d3|DIMM 4|OK|-
+6|d4|DIMM 5|OK|-
+7|d5|DIMM 6|OK|-
+8|d6|DIMM 7|OK|-
+9|d7|DIMM 8|OK|-
+10|d8|DIMM 9|OK|-
+11|d9|DIMM 10|OK|-
+12|da|DIMM 11|OK|-
+13|db|DIMM 12|OK|-
+14|dc|DIMM 13|OK|-
+15|dd|DIMM 14|OK|-
+16|de|DIMM 15|OK|-
+17|df|DIMM 16|OK|-
+18|f1|DIMM 17|OK|-
+19|f2|DIMM 18|OK|-
+20|36|Backup Memory|OK|-
+<--table Memory ends-->
+<--table Power Supply starts-->
+index|sNum|Name|Status|Reading
+0|70|Power Supply 1|Present|-
+1|71|Power Supply 2|NotAvailable|-
+2|28|VT Fault|Absent|-
+3|75|PS 1 Therm Fault|Present|-
+4|f5|PS 1 OP Fault|Present|-
+5|f6|PS 2 OP Fault|Present|-
+6|76|PS 2 Therm Fault|Present|-
+7|77|PS1 12V OV Fault|Present|-
+8|78|PS2 12V OV Fault|Present|-
+9|79|PS1 12V UV Fault|Present|-
+10|7a|PS2 12V UV Fault|Present|-
+11|7b|PS1 12V OC Fault|Present|-
+12|7c|PS2 12V OC Fault|Present|-
+13|7d|PS 1 VCO Fault|Present|-
+14|7e|PS 2 VCO Fault|Present|-
+15|7f|Power Unit|Absent|-
+<--table Power Supply ends-->
+<--table Drive Slot starts-->
+index|sNum|Name|Status|Reading
+0|60|Drive 0|Unused   Faulty|-
+1|61|Drive 1|Unused   Faulty|-
+2|62|Drive 2|Unused|-
+3|63|Drive 3|Unused|-
+4|64|Drive 4|Unused|-
+5|65|Drive 5|Unused|-
+6|66|Drive 6|Unused|-
+7|67|Drive 7|Unused|-
+8|68|Drive 8|Unused|-
+9|69|Drive 9|Unused|-
+10|6a|Drive 10|Unused|-
+11|6b|Drive 11|Unused|-
+12|6c|Drive 12|Unused|-
+13|6d|Drive 13|Unused|-
+14|6e|Drive 14|Unused|-
+15|6f|Drive 15|Unused|-
+<--table Drive Slot ends-->
+<--table Processor starts-->
+index|sNum|Name|Status|Reading
+0|90|CPU 1|ProcPresent|-
+1|91|CPU 2|ProcPresent|-
+2|93|All CPUs|OK|-
+3|94|One of The CPUs|OK|-
+<--table Processor ends-->
+<--table Current starts-->
+index|sNum|Name|Status|Reading
+0|2e|Avg Power|OK|240.00 W
+1|29|Pwr Rail A Fault|_|-
+2|2a|Pwr Rail B Fault|_|-
+3|2b|Pwr Rail C Fault|_|-
+4|2c|Pwr Rail D Fault|_|-
+5|2d|Pwr Rail E Fault|_|-
+<--table Current ends-->
+<--table Power Unit starts-->
+index|sNum|Name|Status|Reading
+0|01|Host Power|Enabled|-
+<--table Power Unit ends-->
+<--table Fan starts-->
+index|sNum|Name|Status|Reading
+0|40|Fan 1A Tach|OK|3306.00 RPM
+1|41|Fan 1B Tach|OK|2375.00 RPM
+2|42|Fan 2A Tach|OK|2407.00 RPM
+3|43|Fan 2B Tach|OK|1975.00 RPM
+4|44|Fan 3A Tach|OK|3422.00 RPM
+5|45|Fan 3B Tach|OK|2675.00 RPM
+6|73|PS 1 Fan Fault|Ready|-
+7|74|PS 2 Fan Fault|Ready|-
+<--table Fan ends-->
+<--table Voltage starts-->
+index|sNum|Name|Status|Reading
+0|16|Planar 3.3V|OK|3.28 V
+1|17|Planar 5V|OK|4.90 V
+2|18|Planar 12V|OK|11.88 V
+3|1c|Planar VBAT|OK|2.84 V
+4|f0|Planar Fault|Exceeded|-
+<--table Voltage ends-->
+<--table Critical Interr starts-->
+index|sNum|Name|Status|Reading
+0|80|NMI State|OK|-
+1|b0|PCIs|OK|-
+2|b1|CPUs|OK|-
+3|b2|DIMMs|OK|-
+<--table Critical Interr ends-->
+<--table Cooling Device starts-->
+index|sNum|Name|Status|Reading
+0|5c|Cooling Zone 1|_|-
+1|5d|Cooling Zone 2|_|-
+2|5e|Cooling Zone 3|_|-
+<--table Cooling Device ends-->
+<--table Chip Set starts-->
+index|sNum|Name|Status|Reading
+0|b3|Sys Board Fault|_|-
+<--table Chip Set ends-->
+<--table FRU Sensor starts-->
+index|sNum|Name|Status|Reading
+0|33|Altitude|OK|240.00 ft
+<--table FRU Sensor ends-->
+<--table Type starts-->
+index|sNum|Name|Status|Reading
+0|SNum|Name|Status|Reading
+<--table Type ends-->
+<--table Cable/Interconn starts-->
+index|sNum|Name|Status|Reading
+0|84|Video USB|_|-
+<--table Cable/Interconn ends-->
+<--table Entity Presence starts-->
+index|sNum|Name|Status|Reading
+0|50|Fan 1|OK*|-
+1|51|Fan 2|OK*|-
+2|52|Fan 3|OK*|-
+3|83|Front Panel|OK*|-
+4|85|DASD Backplane 1|OK*|-
+5|82|SAS Riser|OK*|-
+6|89|PCI Riser 1|OK*|-
+7|8a|PCI Riser 2|OK*|-
+8|86|DASD Backplane 2|Present|-
+9|87|DASD Backplane 3|Absent|-
+10|88|DASD Backplane 4|Absent|-
+<--table Entity Presence ends-->
+ipmiutil ver=2.95
+BMC manufacturer=IBM-x3650
+BMC version= 1.25
+IPMI version=2.0
+Power State=unknown
