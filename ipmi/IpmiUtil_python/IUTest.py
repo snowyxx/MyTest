@@ -232,3 +232,33 @@ BMC LAN Channels  = 1
 Chan 1 AuthTypes  = MD2 MD5 Straight_Passwd
 ipmiutil health, completed successfully
 '''
+
+
+'''
+---- I18N strings ----
+Event\ Log=\u4e8b\u4ef6\u65e5\u5fd7
+Temperature=\u6e29\u5ea6
+OS\ Critical\ Sto=OS Critical Sto
+System\ Event=\u7cfb\u7edf\u4e8b\u4ef6
+Watchdog_2=Watchdog_2
+System\ Firmware=\u7cfb\u7edf\u56fa\u4ef6
+Memory=\u5185\u5b58
+Power\ Supply=\u7535\u6e90
+Drive\ Slot=\u8bbe\u5907\u63d2\u69fd
+Processor=\u5904\u7406\u5668
+Current=\u7535\u6d41
+Power\ Unit=\u7535\u6e90\u5355\u5143
+Fan=\u98ce\u6247
+Voltage=\u7535\u538b
+Critical\ Interr=\u4e25\u91cd\u5185\u90e8\u9519\u8bef
+Cooling\ Device=\u51b7\u5374\u88c5\u5907
+Chip\ Set=\u82af\u7247\u7ec4
+FRU\ Sensor=FRU\u4f20\u611f\u5668
+Cable/Interconn=\u4ea4\u6362\u8fde\u63a5
+Entity\ Presence=\u4f7f\u7528\u7387
+ipmiutil\ ver=ipmiutil\u7248\u672c
+BMC\ manufacturer=BMC\u578b\u53f7
+BMC\ version=BMC\u7248\u672c
+IPMI\ version=IPMI\u7248\u672c
+Power\ State=\u7535\u6e90\u72b6\u6001
+'''
