@@ -1,10 +1,11 @@
+yan@yantekiMacBook-Pro> % python IUTest.py 192.168.0.19 USERID PASSW0RD > output.txt
 <--table Event Log starts-->
 index|sNum|Name|Status|Reading
 0|b6|SEL Fullness|OK|-
 <--table Event Log ends-->
 <--table Temperature starts-->
 index|sNum|Name|Status|Reading
-0|32|Ambient Temp|OK|30.00 C
+0|32|Ambient Temp|OK|29.00 C
 1|31|IOH Temp Status|OK|-
 2|c0|CPU 1 OverTemp|OK|-
 3|c1|CPU 2 OverTemp|OK|-
@@ -124,7 +125,7 @@ index|sNum|Name|Status|Reading
 <--table Processor ends-->
 <--table Current starts-->
 index|sNum|Name|Status|Reading
-0|2e|Avg Power|OK|240.00 W
+0|2e|Avg Power|OK|230.00 W
 1|29|Pwr Rail A Fault|_|-
 2|2a|Pwr Rail B Fault|_|-
 3|2b|Pwr Rail C Fault|_|-
@@ -138,9 +139,9 @@ index|sNum|Name|Status|Reading
 <--table Fan starts-->
 index|sNum|Name|Status|Reading
 0|40|Fan 1A Tach|OK|3306.00 RPM
-1|41|Fan 1B Tach|OK|2375.00 RPM
+1|41|Fan 1B Tach|OK|2400.00 RPM
 2|42|Fan 2A Tach|OK|2407.00 RPM
-3|43|Fan 2B Tach|OK|1975.00 RPM
+3|43|Fan 2B Tach|OK|2000.00 RPM
 4|44|Fan 3A Tach|OK|3422.00 RPM
 5|45|Fan 3B Tach|OK|2675.00 RPM
 6|73|PS 1 Fan Fault|Ready|-
@@ -150,7 +151,7 @@ index|sNum|Name|Status|Reading
 index|sNum|Name|Status|Reading
 0|16|Planar 3.3V|OK|3.28 V
 1|17|Planar 5V|OK|4.90 V
-2|18|Planar 12V|OK|11.88 V
+2|18|Planar 12V|OK|11.93 V
 3|1c|Planar VBAT|OK|2.84 V
 4|f0|Planar Fault|Exceeded|-
 <--table Voltage ends-->
@@ -173,12 +174,8 @@ index|sNum|Name|Status|Reading
 <--table Chip Set ends-->
 <--table FRU Sensor starts-->
 index|sNum|Name|Status|Reading
-0|33|Altitude|OK|240.00 ft
+0|33|Altitude|OK|200.00 ft
 <--table FRU Sensor ends-->
-<--table Type starts-->
-index|sNum|Name|Status|Reading
-0|SNum|Name|Status|Reading
-<--table Type ends-->
 <--table Cable/Interconn starts-->
 index|sNum|Name|Status|Reading
 0|84|Video USB|_|-

@@ -32,7 +32,7 @@ def main(host, user, passwd):
                 tables.setdefault(tableName, []).append(value)
                 
     for tabName, tabValues in tables.items():
-        if tabName is 'Type':
+        if tabName == 'Type':
             continue
         print '<--table {} starts-->'.format(tabName)
         print 'index|sNum|Name|Status|Reading'
@@ -256,9 +256,6 @@ Chip\ Set=\u82af\u7247\u7ec4
 FRU\ Sensor=FRU\u4f20\u611f\u5668
 Cable/Interconn=\u4ea4\u6362\u8fde\u63a5
 Entity\ Presence=\u4f7f\u7528\u7387
-ipmiutil\ ver=ipmiutil\u7248\u672c
-BMC\ manufacturer=BMC\u578b\u53f7
-BMC\ version=BMC\u7248\u672c
-IPMI\ version=IPMI\u7248\u672c
-Power\ State=\u7535\u6e90\u72b6\u6001
+index=\u7d22\u5f15
+sNum=\u503c
 '''
