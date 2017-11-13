@@ -17,7 +17,8 @@ def main(host, user, passwd):
     sensorCmd = 'ipmiutil sensor  -N '+host+' -U '+user+' -P '+passwd+' -s'
     healthCmd = 'ipmiutil health  -N '+host+' -U '+user+' -P '+passwd
 
-    print '<--table Sensor starts-->'
+    tables = {}  # {"fan":[[sNum,Name,Status,Reading],[sNum,Name,Status,Reading]]}
+    
     sensorOutput = runCMDBySubProcess(sensorCmd)
     if sensorOutput[0] == 0:
         sensorResult = sensorOutput[1]
@@ -26,8 +27,18 @@ def main(host, user, passwd):
                 columns=[x.strip() for x in line.split('|')]
                 if '' in columns:
                     columns[columns.index('')]='-'
-                print '|'.join(columns)
-    print '<--table Sensor ends-->'
+                tableName = columns[2]
+                value = columns[3:]
+                tables.setdefault(tableName, []).append(value)
+                
+    for tabName, tabValues in tables.items():
+        if tabName is 'Type':
+            continue
+        print '<--table {} starts-->'.format(tabName)
+        print 'index|sNum|Name|Status|Reading'
+        for idx, row in enumerate(tabValues):
+            print '{}|{}'.format(idx,'|'.join(row))
+        print '<--table {} ends-->'.format(tabName)
 
     healthOutput = runCMDBySubProcess(healthCmd)
     if healthOutput[0] == 0:
