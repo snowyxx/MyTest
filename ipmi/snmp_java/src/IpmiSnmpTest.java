@@ -138,11 +138,11 @@ public class IpmiSnmpTest {
 			ArrayList row = (ArrayList) result.get(i);
 			try {
 				if ("Error".equals(name)) {
-					String id = (0 < row.size()) ? (String) row.get(0) : "-";
-					String severity = (2 < row.size()) ? (String) row.get(2) : "-";
-					String message = (1 < row.size()) ? (String) row.get(1) : "-";
-					String date = (3 < row.size()) ? (String) row.get(3) : "-";
-					String time = (4 < row.size()) ? (String) row.get(4) : "-";
+					String id = (0 < row.size()&&!"".equals(row.get(0))) ? (String) row.get(0) : "-";
+					String severity = (2 < row.size()&&!"".equals(row.get(2))) ? (String) row.get(2) : "-";
+					String message = (1 < row.size()&&!"".equals(row.get(1))) ? (String) row.get(1) : "-";
+					String date = (3 < row.size()&&!"".equals(row.get(3))) ? (String) row.get(3) : "-";
+					String time = (4 < row.size()&&!"".equals(row.get(4))) ? (String) row.get(4) : "-";
 					if (severity.indexOf("error(0)") > -1) {
 						sb.append(id).append("#").append(date).append(" ").append(time).append("#").append(message);
 						count += 1;
@@ -151,29 +151,29 @@ public class IpmiSnmpTest {
 						continue;
 					}
 				} else if ("Power".equals(name)) {
-					String index = (0 < row.size()) ? (String) row.get(0) : "-";
-					String powerFruName = (1 < row.size()) ? (String) row.get(1) : "-";
-					String powerHealthStatus = (5 < row.size()) ? (String) row.get(5) : "-";
-
+					String index = (0 < row.size()&&!"".equals(row.get(0))) ? (String) row.get(0) : "-";
+					String powerFruName = (1 < row.size()&&!"".equals(row.get(1))) ? (String) row.get(1) : "-";
+					String powerHealthStatus = (5 < row.size()&&!"".equals(row.get(5))) ? (String) row.get(5) : "-";
+					
 					sb.append(index).append("#").append(powerFruName).append("#").append(powerHealthStatus);
 				} else if ("Disk".equals(name)) {
-					String index = (0 < row.size()) ? (String) row.get(0) : "-";
-					String diskFruName = (1 < row.size()) ? (String) row.get(1) : "-";
-					String diskHealthStatus = (2 < row.size()) ? (String) row.get(2) : "-";
+					String index = (0 < row.size()&&!"".equals(row.get(0))) ? (String) row.get(0) : "-";
+					String diskFruName = (1 < row.size()&&!"".equals(row.get(1))) ? (String) row.get(1) : "-";
+					String diskHealthStatus = (2 < row.size()&&!"".equals(row.get(2))) ? (String) row.get(2) : "-";
 
 					sb.append(index).append("#").append(diskFruName).append("#").append(diskHealthStatus);
 				} else if ("CPU".equals(name)) {
-					String index = (0 < row.size()) ? (String) row.get(0) : "-";
-					String cpuVpdDescription = (1 < row.size()) ? (String) row.get(1) : "-";
-					String cpuVpdSpeed = (2 < row.size()) ? (String) row.get(2) : "-";
-					String cpuVpdidentifier = (3 < row.size()) ? (String) row.get(3) : "-";
-					String cpuVpdType = (4 < row.size()) ? (String) row.get(4) : "-";
-					String cpuVpdFamily = (5 < row.size()) ? (String) row.get(5) : "-";
-					String cpuVpdCores = (6 < row.size()) ? (String) row.get(6) : "-";
-					String cpuVpdThreads = (7 < row.size()) ? (String) row.get(7) : "-";
-					String cpuVpdVoltage = (8 < row.size()) ? (String) row.get(8) : "-";
-					String cpuVpdDataWidth = (9 < row.size()) ? (String) row.get(9) : "-";
-					String cpuVpdHealthStatus = (10 < row.size()) ? (String) row.get(10) : "-";
+					String index = (0 < row.size()&&!"".equals(row.get(0))) ? (String) row.get(0) : "-";
+					String cpuVpdDescription = (1 < row.size()&&!"".equals(row.get(1))) ? (String) row.get(1) : "-";
+					String cpuVpdSpeed = (2 < row.size()&&!"".equals(row.get(2))) ? (String) row.get(2) : "-";
+					String cpuVpdidentifier = (3 < row.size()&&!"".equals(row.get(3))) ? (String) row.get(3) : "-";
+					String cpuVpdType = (4 < row.size()&&!"".equals(row.get(4))) ? (String) row.get(4) : "-";
+					String cpuVpdFamily = (5 < row.size()&&!"".equals(row.get(5))) ? (String) row.get(5) : "-";
+					String cpuVpdCores = (6 < row.size()&&!"".equals(row.get(6))) ? (String) row.get(6) : "-";
+					String cpuVpdThreads = (7 < row.size()&&!"".equals(row.get(7))) ? (String) row.get(7) : "-";
+					String cpuVpdVoltage = (8 < row.size()&&!"".equals(row.get(8))) ? (String) row.get(8) : "-";
+					String cpuVpdDataWidth = (9 < row.size()&&!"".equals(row.get(9))) ? (String) row.get(9) : "-";
+					String cpuVpdHealthStatus = (10 < row.size()&&!"".equals(row.get(10))) ? (String) row.get(10) : "-";
 
 					sb.append(index).append("#").append(cpuVpdDescription).append("#").append(cpuVpdSpeed).append("#")
 							.append(cpuVpdidentifier).append("#").append(cpuVpdType).append("#").append(cpuVpdFamily)
@@ -181,33 +181,37 @@ public class IpmiSnmpTest {
 							.append(cpuVpdVoltage).append("#").append(cpuVpdDataWidth).append("#")
 							.append(cpuVpdHealthStatus);
 				} else if ("Memory".equals(name)) {
-					String index = (0 < row.size()) ? (String) row.get(0) : "-";
-					String memoryVpdDescription = (1 < row.size()) ? (String) row.get(1) : "-";
-					String memoryVpdType = (5 < row.size()) ? (String) row.get(5) : "-";
-					String memoryVpdHealthStatus = (7 < row.size()) ? (String) row.get(7) : "-";
+					String index = (0 < row.size()&&!"".equals(row.get(0))) ? (String) row.get(0) : "-";
+					String memoryVpdDescription = (1 < row.size()&&!"".equals(row.get(1))) ? (String) row.get(1) : "-";
+					String memoryVpdType = (5 < row.size()&&!"".equals(row.get(5))) ? (String) row.get(5) : "-";
+					String memoryVpdHealthStatus = (7 < row.size()&&!"".equals(row.get(7))) ? (String) row.get(7) : "-";
+					
 					sb.append(index).append("#").append(memoryVpdDescription).append("#").append(memoryVpdType)
 							.append("#").append(memoryVpdHealthStatus);
 				} else if ("TMP".equals(name)) {
-					String index = (0 < row.size()) ? (String) row.get(0) : "-";
-					String tempDescr = (1 < row.size()) ? (String) row.get(1) : "-";
-					String tempReading = (2 < row.size()) ? (String) row.get(2) : "-";
-					String tempHealthStatus = (10 < row.size()) ? (String) row.get(10) : "-";
+					String index = (0 < row.size()&&!"".equals(row.get(0))) ? (String) row.get(0) : "-";
+					String tempDescr = (1 < row.size()&&!"".equals(row.get(1))) ? (String) row.get(1) : "-";
+					String tempReading = (2 < row.size()&&!"".equals(row.get(2))) ? (String) row.get(2) : "-";
+					String tempHealthStatus = (10 < row.size()&&!"".equals(row.get(10))) ? (String) row.get(10) : "-";
+					
 					sb.append(index).append("#").append(tempDescr).append("#").append(tempReading)
 							.append("#").append(tempHealthStatus);
 				}  else if ("VOLT".equals(name)) {
-					String index = (0 < row.size()) ? (String) row.get(0) : "-";
-					String voltDescr = (1 < row.size()) ? (String) row.get(1) : "-";
-					String voltReading = (2 < row.size()) ? (String) row.get(2) : "-";
-					String voltHealthStatus = (10 < row.size()) ? (String) row.get(10) : "-";
+					String index = (0 < row.size()&&!"".equals(row.get(0))) ? (String) row.get(0) : "-";
+					String voltDescr = (1 < row.size()&&!"".equals(row.get(1))) ? (String) row.get(1) : "-";
+					String voltReading = (2 < row.size()&&!"".equals(row.get(2))) ? (String) row.get(2) : "-";
+					String voltHealthStatus = (10 < row.size()&&!"".equals(row.get(10))) ? (String) row.get(10) : "-";
+					
 					voltReading = String.valueOf(Integer.valueOf(voltReading) / 1000.0);
 					sb.append(index).append("#").append(voltDescr).append("#").append(voltReading)
 							.append("#").append(voltHealthStatus);
 				} else if ("FAN".equals(name)) {
-					String index = (0 < row.size()) ? (String) row.get(0) : "-";
-					String fanDescr = (1 < row.size()) ? (String) row.get(1) : "-";
-					String fanReading = (2 < row.size()) ? (String) row.get(2) : "-";
-					String fanHealthStatus = (9 < row.size()) ? (String) row.get(9) : "-";
-					fanReading = fanReading.indexOf("%") > 0 ? fanReading.substring(0, fanReading.indexOf("%")).trim() : fanReading;
+					String index = (0 < row.size()&&!"".equals(row.get(0)))? (String) row.get(0) : "-";
+					String fanDescr = (1 < row.size()&&!"".equals(row.get(1))) ? (String) row.get(1) : "-";
+					String fanReading = (2 < row.size()&&!"".equals(row.get(2))) ? (String) row.get(2) : "-";
+					String fanHealthStatus = (9 < row.size()&&!"".equals(row.get(9))) ? (String) row.get(9) : "-";
+			
+					fanReading = fanReading.indexOf("%") > 0 ? fanReading.substring(0, fanReading.indexOf("%")).trim() :fanReading; 
 					sb.append(index).append("#").append(fanDescr).append("#").append(fanReading)
 							.append("#").append(fanHealthStatus);
 				}  else {
