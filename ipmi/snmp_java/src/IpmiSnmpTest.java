@@ -92,6 +92,11 @@ public class IpmiSnmpTest {
 		client.target.setTargetPort(161);
 		client.target.setCommunity(community);
 		client.target.setSnmpVersion(0);
+		try {
+			client.target.loadMibs("./RFC1213-MIB ./imm.mib");
+		} catch (MibException | IOException e) {
+			client.logger.info("Can not read mib file. Do add imm.mib and RFC1213.MIB file to this folder!");
+		}
 		String snmpTimeout = null;
 		try {
 			snmpTimeout = client.prop.getProperty("snmp.target.set.timeout");
@@ -126,7 +131,9 @@ public class IpmiSnmpTest {
 			System.out.println("<--table " + name + " starts-->\nindex#voltDescr#voltReading#voltHealthStatus");
 		} else if ("FAN".equals(name)) {
 			System.out.println("<--table " + name + " starts-->\nindex#fanDescr#fanReading#fanHealthStatus");
-		} else {
+		} else if ("Network Interface".equals(name)) {
+			System.out.println("<--table " + name + " starts-->\nindex#ifDescr#ifSpeed#ifPhysAddress#ifAdminStatus#ifOperStatus");
+		}else {
 			System.out.println("<--table " + name + " starts-->\nID#Name#Value");
 		}
 
@@ -214,7 +221,17 @@ public class IpmiSnmpTest {
 					fanReading = fanReading.indexOf("%") > 0 ? fanReading.substring(0, fanReading.indexOf("%")).trim() :fanReading; 
 					sb.append(index).append("#").append(fanDescr).append("#").append(fanReading)
 							.append("#").append(fanHealthStatus);
-				}  else {
+				} else if("Network Interface".equals(name)) {
+					String index = (0 < row.size()&&!"".equals(row.get(0)))? (String) row.get(0) : "-";
+					String ifDescr = (1 < row.size()&&!"".equals(row.get(1))) ? (String) row.get(1) : "-";
+					String ifSpeed = (4 < row.size()&&!"".equals(row.get(4))) ? (String) row.get(4) : "-";
+					String ifPhysAddress = (5 < row.size()&&!"".equals(row.get(5))) ? (String) row.get(5) : "-";
+					String ifAdminStatus = (6 < row.size()&&!"".equals(row.get(6))) ? (String) row.get(6) : "-";
+					String ifOperStatus = (7 < row.size()&&!"".equals(row.get(7))) ? (String) row.get(7) : "-";
+			
+					sb.append(index).append("#").append(ifDescr).append("#").append(ifSpeed)
+							.append("#").append(ifPhysAddress).append("#").append(ifAdminStatus).append("#").append(ifOperStatus);
+				} else {
 
 					// TO IMPROVE: print first 3 columns of a table by default....
 					// it is not a good idea. Should make it flexible using a configuration file,
@@ -365,11 +382,7 @@ public class IpmiSnmpTest {
 	private ArrayList getTableRowsByMib(String oid) {
 		ArrayList result = new ArrayList();
 		String oids[] = null;
-		try {
-			target.loadMibs("./imm.mib");
-		} catch (MibException | IOException e) {
-			logger.info("Can not read mib file. Do add imm.mib file to this folder!");
-		}
+
 		MibOperations mibops = target.getMibOperations();
 		SnmpOID snmptableoid = mibops.getSnmpOID(oid);
 		MibNode tablenode = mibops.getMibNode(oid);
