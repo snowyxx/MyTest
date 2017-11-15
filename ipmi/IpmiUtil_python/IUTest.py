@@ -26,7 +26,7 @@ def main(host, user, passwd):
             if line.find('|') > -1:
                 columns=[x.strip() for x in line.split('|')]
                 if '' in columns:
-                    columns[columns.index('')]='-'
+                    columns = ['-' if x=='' else x for x in columns]
                 tableName = columns[2]
                 value = columns[3:]
                 tables.setdefault(tableName, []).append(value)
