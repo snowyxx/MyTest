@@ -24,12 +24,12 @@ def main(host, user, passwd):
         sensorResult = sensorOutput[1]
         for line in sensorResult.split('\n'):
             if line.find('|') > -1:
-                columns=[x.strip() for x in line.split('|')]
-                if '' in columns:
-                    columns = ['-' if x=='' else x for x in columns]
+                columns = ['-' if x.strip() == '' else x.strip() for x in line.split('|')]
                 tableName = columns[2]
                 value = columns[3:]
                 tables.setdefault(tableName, []).append(value)
+    else:
+        print '!!!! sensor command failed. \nreturn code is: {} \n {}\n!!!\n'.format(sensorOutput[0],sensorOutput[1])
                 
     for tabName, tabValues in tables.items():
         if tabName == 'Type':
@@ -59,6 +59,8 @@ def main(host, user, passwd):
                 print 'IPMI version='+bmcVer_M.group(2)
             elif powerStat_M:
                 print 'Power State='+powerStat_M.group(1)
+    else:
+        print '!!!! health command failed. \nreturn code is: {} \n {}\n!!!!\n'.format(healthOutput[0],healthOutput[1])
 if __name__ == '__main__':
     if len(sys.argv) > 3:
         host = sys.argv[1]
