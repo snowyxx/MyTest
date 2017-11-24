@@ -92,6 +92,7 @@ public class IpmiSnmpTest {
 		client.target.setTargetPort(161);
 		client.target.setCommunity(community);
 		client.target.setSnmpVersion(0);
+		client.logger.info("------------ host: "+host+" ----------");
 		try {
 			client.target.loadMibs("./RFC1213-MIB ./imm.mib");
 		} catch (MibException | IOException e) {
@@ -104,7 +105,14 @@ public class IpmiSnmpTest {
 		}
 		int snmpTimeoutValue = snmpTimeout != null ? Integer.parseInt(snmpTimeout) : 5;
 		client.target.setTimeout(snmpTimeoutValue);
-
+		
+		String retries = null;
+		try {
+			retries = client.prop.getProperty("snmp.target.set.retries");
+		} catch (Exception e) {
+		}
+		int retriesValue = retries != null ? Integer.parseInt(retries) : 0;
+		if (retriesValue > 0) {client.target.setRetries(retriesValue);}
 		client.processIBMHWData();
 		System.exit(0);
 	}

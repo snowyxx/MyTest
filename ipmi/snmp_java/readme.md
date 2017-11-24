@@ -8,7 +8,7 @@ Default:
 
 - TMP
 - VOLT
-- FAN
+- FANSets the SNMP target retries value. Default is 0.
 - Disk  (imm2 only)
 - Power (imm2 only)
 - CPU  (imm2 only)
@@ -36,7 +36,7 @@ Custome:
 - snmpGetTableByMib = false  : Only set to "true" to get a table data by snmpGetAllList() base on a mib file, otherwise will try to use snmpGetNext()
 - maxRowsNumber = 100  :Max rows to be got of a table oid, works when snmpGetTableByMib is not true
 - snmp.target.set.timeout = 5 :snmp timeout setting in second, default value is 5.
-
+- snmp.target.set.retries: Sets the SNMP target retries value. Default is 0.
 
 ### Usage
 
