@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <style>
+  table,th,td,tr,input,textarea,form,p,br{
+    margin: 0;
+    padding:0;
+  }
+  </style>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>transform between native and ascii</title>
+  <script type="text/javascript"><!--
+
+var keyStr = "ABCDEFGHIJKLMNOP" +
+              "QRSTUVWXYZabcdef" +
+              "ghijklmnopqrstuv" +
+              "wxyz0123456789+/" +
+              "=";
+
+function native2ascii(strNative) {
+     var output = "";
+     var escape=document.getElementById('escape');
+     for (var i=0; i<strNative.length; i++) {
+         var c = strNative.charAt(i);
+         var cc = strNative.charCodeAt(i);
+         if (cc > 0xff)
+          if(escape.checked){
+            output += "\\\\u" + toHex(cc >> 8) + toHex(cc & 0xff);
+          }else{
+            output += "\\u" + toHex(cc >> 8) + toHex(cc & 0xff);
+          }
+         else
+           output += c;
+     }
+     //alert(output);
+     document.getElementById("output").value=output;
+     return output;
+}
+
+var hexChars = "0123456789ABCDEF";
+function toHex(n) {
+     var nH = (n >> 4) & 0x0f;
+     var nL = n & 0x0f;
+     return hexChars.charAt(nH) + hexChars.charAt(nL);
+}
+
+function ascii2native(strAscii) {
+     var output = "";
+     var posFrom = 0;
+     var posTo = strAscii.indexOf("\\u", posFrom);
+     while (posTo >= 0) {
+         output += strAscii.substring(posFrom, posTo);
+         output += toChar(strAscii.substr(posTo, 6));
+         posFrom = posTo + 6;
+         posTo = strAscii.indexOf("\\u", posFrom);
+     }
+     output += strAscii.substr(posFrom);
+     //alert(output);
+     document.getElementById("input").value=output;
+     return output;
+}
+
+function toChar(str) {
+     if (str.substr(0, 2) != "\\u") return str;
+
+     var code = 0;
+     for (var i=2; i<str.length; i++) {
+         var cc = str.charCodeAt(i);
+         if (cc >= 0x30 && cc <= 0x39)
+             cc = cc - 0x30;
+         else if (cc >= 0x41 && cc <= 0x5A)
+             cc = cc - 0x41 + 10;
+         else if (cc >= 0x61 && cc <= 0x7A)
+             cc = cc - 0x61 + 10;
+
+         code <<= 4;
+         code += cc;
+     }
+
+     if (code < 0xff) return str;
+
+     return String.fromCharCode(code);
+}
+//--></script>
+</head>
+<body style="font-family: 宋体;">
+  <form name="theForm">
+    <p align="center">
+      汉字与ASCII转换工具
+      <br></p>
+    <table>
+      <tbody>
+        <tr>
+          <td width="40%">汉字:&nbsp;&nbsp;</td>
+          <td style="vertical-align: top;">
+            <br></td>
+          <td width="40%">ACSII:&nbsp;&nbsp;</td>
+        </tr>
+        <tr>
+          <td>
+            <textarea name="input" id="input" cols="70" rows="35" wrap="on"></textarea>
+          </td>
+          <td style="vertical-align: top; margin: 0; padding-top:50px;" align="center">
+           
+            <input value="native to ascii&gt;&gt;"
+ onclick="native2ascii(document.theForm.input.value);" type="button">        
+            <br><br>
+            <input type="checkbox" id="escape">        
+            添加“\”，用于正则
+            <br><br>
+            
+            <br>
+            <br>
+            <input value="&lt;&lt;ascii to native"
+ onclick="ascii2native(document.theForm.output.value);" type="button"></td>
+          <td>
+            <textarea name="output" id="output" cols="70" rows="35" wrap="on"></textarea>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </form>
+</body>
+</html>
