@@ -1,3 +1,5 @@
+# IpmiSnmpTest.java
+
 ### Descripton
 
 A script to get IMM monitor information by SNMP. 
@@ -41,3 +43,15 @@ Custome:
 ### Usage
 
 `java -cp .;bin;lib\* IpmiSnmpTest <IP or host name> <snmp community>`
+
+
+# APActiveClientCount.java
+
+### Descripton
+
+A script to get active client count of Cisco app. 
+
+### Usage
+
+`java -cp .;bin;lib\* APActiveClientCountt <IP or host name> <snmp community> <v1|v2c>`
+

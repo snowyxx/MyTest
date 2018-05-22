@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<entry key="thresholdEnabled">true</entry>
+<entry key="criticalMessage">$INSTANCE的$MONITOR监视器为严重。请检查。</entry>
+<entry key="executeFrom">0</entry>
+<entry key="interval">15</entry>
+<entry key="monitorName">APActiveClient</entry>
+<entry key="commandLine">cmd /c ${FileName}.bat ${IPAddress} ${SNMPRead} v2c</entry>
+<entry key="criticalThresholdType">min</entry>
+<entry key="yaxisText">units</entry>
+<entry key="clrMessage">$INSTANCE的$MONITOR现在恢复了正常</entry>
+<entry key="workingDir">${TempDir}</entry>
+<entry key="version">2</entry>
+<entry key="scriptBody">@echo off
+cd ..\snmp_java
+"..\jre\bin\java" -cp .;lib/* APActiveClientCount %*
+cd ..\temp</entry>
+<entry key="criticalThresholdValue">0</entry>
+<entry key="timeout">60</entry>
+<entry key="failureThreshold">1</entry>
+<entry key="rearmValue">0</entry>
+<entry key="monitorDescription">Fetch active client of each AP. -1 means that AP was offline</entry>
+</properties>
