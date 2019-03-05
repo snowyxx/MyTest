@@ -113,6 +113,15 @@ public class IpmiSnmpTest {
 		}
 		int retriesValue = retries != null ? Integer.parseInt(retries) : 0;
 		if (retriesValue > 0) {client.target.setRetries(retriesValue);}
+		SnmpOID snmpoid = new SnmpOID(".1.3.6.1.2.1.1.2.0");
+		client.target.setSnmpOID(snmpoid);
+		String result = client.target.snmpGet();
+		if (result == null) {
+			System.out.println("script_availability=1");
+			System.out.println("script_message=failed to connect the snmp agent");
+			System.exit(0);
+		}
+//		System.out.println("sysoid" + "=" + result);
 		client.processIBMHWData();
 		System.exit(0);
 	}
